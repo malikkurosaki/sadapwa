@@ -76,17 +76,26 @@ class MyHome extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: FutureBuilder<http.Response>(
-                                  future: http.get(Uri.parse("https://raw.githubusercontent.com/malikkurosaki/sadapwa/main/content.json")),
+                                  future: http.get(Uri.parse(
+                                      "https://raw.githubusercontent.com/malikkurosaki/sadapwa/main/content.json")),
                                   builder: (c, s) {
                                     if (s.connectionState != ConnectionState.done)
                                       return Center(
                                         child: CircularProgressIndicator(),
                                       );
-                                    
+
                                     final listData = jsonDecode(s.data!.body);
 
                                     return ListView(
                                       children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text("Daripada Curiga Terus, Begini Cara Menyadap WhatsApp Pasangan!",
+                                            style: TextStyle(
+                                              fontSize: 20
+                                            ),
+                                          ),
+                                        ),
                                         ...listData.map(
                                           (e) => Card(
                                             child: Padding(
@@ -98,7 +107,12 @@ class MyHome extends StatelessWidget {
                                                     e['title'].toString(),
                                                   ),
                                                   Text(e['img'].toString()),
-                                                  CachedNetworkImage(imageUrl: e['img']??"")
+                                                  CachedNetworkImage(
+                                                      errorWidget: (context, url, error) => Center(
+                                                          child: CachedNetworkImage(
+                                                              imageUrl:
+                                                                  "https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png")),
+                                                      imageUrl: e['img'])
                                                 ],
                                               ),
                                             ),
