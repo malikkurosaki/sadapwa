@@ -75,7 +75,7 @@ class MyHome extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: FutureBuilder<http.Response>(
-                                  future: http.get(Uri.parse("https://raw.githubusercontent.com/malikkurosaki/assets-images/main/sadapwa/content.json")),
+                                  future: http.get(Uri.parse("https://raw.githubusercontent.com/malikkurosaki/sadapwa/main/content.json")),
                                   builder: (c, s) {
                                     if (s.connectionState != ConnectionState.done)
                                       return Center(
