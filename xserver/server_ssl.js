@@ -5,7 +5,7 @@ const app = express();
 const PORT = process.env.PORT || 3002;
 const cors = require('cors');
 const api = require('./apis/api');
-const ip = require('ip');
+// const ip = require('ip');
 
 app.use(cors())
 app.use(express.json());
@@ -19,5 +19,5 @@ https.createServer(
         cert: fs.readFileSync("cert.pem"),
     },
     app).listen(PORT, () => {
-        console.log(`Listening https://${ip.address()}:${PORT}`);
+        console.log(`Listening https://${PORT}`);
     });
