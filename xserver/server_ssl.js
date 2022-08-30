@@ -1,5 +1,5 @@
 const https = require('https');
-const fs = request("fs");
+const fs = require("fs");
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3002;
