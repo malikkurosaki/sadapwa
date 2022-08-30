@@ -12,8 +12,11 @@ prompts({
     name: "apa",
     choices: dir.map(e => {
         return {
-            title: e.split(".")[0],
+            title: e.split(".")[0].replace(/_/g, " "),
             value: e
         }
     })
-}).then(({ apa }) => exec(`node ${apa}`, { stdio: "inherit", cwd: path.join(__dirname, './xcon') }));
+}).then(({ apa }) => {
+    if (apa == undefined) return console.log("baeklah");
+    exec(`node ${apa}`, { stdio: "inherit", cwd: path.join(__dirname, './xcon') })
+});
