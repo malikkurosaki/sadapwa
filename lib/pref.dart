@@ -1,3 +1,3 @@
 class Pref {
-  static const host = "http://localhost:3002";
+  static const host = "http://192.168.43.112:3002";
 }

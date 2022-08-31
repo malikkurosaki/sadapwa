@@ -1,0 +1,1 @@
+require('child_process').execSync(`flutter run`, { stdio: "inherit", cwd: require('path').join(__dirname, "../") })
