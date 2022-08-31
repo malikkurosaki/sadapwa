@@ -7,7 +7,7 @@ async function getImg(name) {
     if (!fs.existsSync(imgPath)) {
         return null;
     }
-    return fs.readFileSync(imgPath)
+    return path.join(__dirname, './../assets/' + name);
 }
 
 const getImage = expressAsyncHandler(async (req, res) => {

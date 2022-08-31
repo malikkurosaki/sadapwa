@@ -6,6 +6,6 @@ const api = require('express').Router();
 api.get('/img/:name', Img.getImage)
 
 // content
-api.get('/content', Content.getContent)
+api.get('/ctn', Content.getContent)
 
 module.exports = api

@@ -41,8 +41,10 @@ dependencies:
   cached_network_image: ^3.2.1
   http: ^0.13.5
   markdown_widget: ^1.2.9
+  
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.10.0
   flutter_test:
     sdk: flutter
 
@@ -55,6 +57,13 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  image_path: 'assets/images/icon.png'
+  android: true
+  web: 
+    generate: true
+    image_path: "assets/images/icon.png"
 
 # The following section is specific to Flutter packages.
 flutter:

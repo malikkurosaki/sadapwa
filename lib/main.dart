@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:menyadapwa/content.dart';
+import 'package:markdown_widget/markdown_widget.dart';
+import 'package:menyadapwa/pref.dart';
 import 'package:menyadapwa/val.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:http/http.dart' as http;
@@ -75,52 +76,45 @@ class MyHome extends StatelessWidget {
                           child: Column(
                             children: [
                               Flexible(
-                                child: FutureBuilder<http.Response>(
-                                  future: http.get(Uri.parse(
-                                      "https://raw.githubusercontent.com/malikkurosaki/sadapwa/main/content.json")),
-                                  builder: (c, s) {
-                                    if (s.connectionState != ConnectionState.done)
-                                      return Center(
-                                        child: CircularProgressIndicator(),
-                                      );
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: FutureBuilder<http.Response>(
+                                    future: http.get(Uri.parse("${Pref.host}/ctn")),
+                                    builder: (c, s) {
+                                      if (s.connectionState != ConnectionState.done)
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
 
-                                    final listData = jsonDecode(s.data!.body);
-
-                                    return ListView(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text("Daripada Curiga Terus, Begini Cara Menyadap WhatsApp Pasangan!",
-                                            style: TextStyle(
-                                              fontSize: 20
+                                      final data = jsonDecode(s.data!.body);
+                                      return ListView(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              data['title'],
+                                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                                             ),
                                           ),
-                                        ),
-                                        ...listData.map(
-                                          (e) => Card(
+                                          SizedBox(
+                                            width: 460,
                                             child: Padding(
                                               padding: const EdgeInsets.all(8.0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    e['title'].toString(),
-                                                  ),
-                                                  Text(e['img'].toString()),
-                                                  CachedNetworkImage(
-                                                      errorWidget: (context, url, error) => Center(
-                                                          child: CachedNetworkImage(
-                                                              imageUrl:
-                                                                  "https://upload.wikimedia.org/wikipedia/commons/0/0a/No-image-available.png")),
-                                                      imageUrl: e['img'])
-                                                ],
-                                              ),
+                                              child: CachedNetworkImage(
+                                                  width: double.infinity,
+                                                  fit: BoxFit.contain,
+                                                  imageUrl: "${Pref.host}/img/${data['img']}"),
                                             ),
                                           ),
-                                        )
-                                      ],
-                                    );
-                                  },
+                                          MarkdownWidget(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            data: data['data'],
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
                               )
                             ],
