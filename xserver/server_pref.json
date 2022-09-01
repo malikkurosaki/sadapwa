@@ -1,0 +1,6 @@
+{
+    "server_ssl": true,
+    "port": "3002",
+    "host_pro": "makurostudio.my.id",
+    "localhost": "localhost"
+}
