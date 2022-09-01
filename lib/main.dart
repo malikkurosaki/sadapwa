@@ -1,21 +1,30 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:http/http.dart' as http;
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:menyadapwa/pref.dart';
 import 'package:menyadapwa/val.dart';
 import 'package:responsive_builder/responsive_builder.dart';
-import 'package:http/http.dart' as http;
 
 // barner ads ca-app-pub-2622751365523301/8852544507
 // Interstitial ca-app-pub-2622751365523301/8911382117
 
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
+
 void main() async {
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   // MobileAds.instance
@@ -118,12 +127,22 @@ class _MyHomeState extends State<MyHome> {
     );
   }
 
+  _loadData() async {
+    http.get(Uri.parse(Pref.host + "/ctn")).then((res) {
+      if (res.statusCode == 200) {
+        _datanya.value.val.assignAll(jsonDecode(res.body));
+        _datanya.refresh();
+      }
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _loadBarnerAdd();
     _createInterasialAds();
+    _loadData();
   }
 
   // _onLoad() async {
@@ -154,23 +173,10 @@ class _MyHomeState extends State<MyHome> {
                                 Flexible(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: FutureBuilder<http.Response>(
-                                      future: http.get(Uri.parse("${Pref.host}/ctn")),
-                                      builder: (c, s) {
-                                        // if (s.connectionState != ConnectionState.done) {
-                                        //   return Center(
-                                        //     child: CircularProgressIndicator(),
-                                        //   );
-                                        // }
-
-                                        // if (s.data == null) return Text((s.data).toString());
-
-                                        if (s.connectionState == ConnectionState.done) {
-                                          _datanya.value.val = jsonDecode(s.data!.body);
-                                        }
-
-                                        return Builder(builder: (context) {
-                                          return Obx(() => _datanya.value.val.isEmpty
+                                    child: Builder(
+                                      builder: (context) {
+                                        return Obx(
+                                          () => _datanya.value.val.isEmpty
                                               ? Center(
                                                   child: CircularProgressIndicator(),
                                                 )
@@ -225,8 +231,8 @@ class _MyHomeState extends State<MyHome> {
                                                       data: _datanya.value.val['data'],
                                                     ),
                                                   ],
-                                                ));
-                                        });
+                                                ),
+                                        );
                                       },
                                     ),
                                   ),

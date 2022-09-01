@@ -7,4 +7,5 @@ const target = fs.readFileSync(path.join(__dirname, './../lib/pref.dart')).toStr
 const cari = target.match(/static const host = "(.*)";/g)
 const maka = target.replace(cari[0], template);
 fs.writeFileSync(path.join(__dirname, './../lib/pref.dart'), maka);
+console.log("set client mode production");
 
